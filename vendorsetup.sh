@@ -83,3 +83,7 @@ export FOX_REPLACE_TOOLBOX_GETPROP=1
 export FOX_DELETE_AROMAFM=1
 export FOX_ENABLE_APP_MANAGER=1
 export FOX_USE_NAND_RESET=1
+
+add_lunch_combo fox_spinel-eng
+add_lunch_combo fox_spinel-userdebug
+
