@@ -17,11 +17,9 @@ jobs:
         sudo rm -rf /usr/local/share/boost
         sudo apt-get clean
 
-    - name: Set up Swap Space Safely
+    - name: Set up Swap Space
       run: |
-        sudo swapoff -a || true
-        sudo rm -f /swapfile
-        sudo dd if=/dev/zero of=/swapfile bs=1M count=4096 status=none
+        sudo fallocate -l 4G /swapfile
         sudo chmod 600 /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
@@ -38,8 +36,6 @@ jobs:
 
     - name: Checkout Device Tree
       uses: actions/checkout@v4
-      with:
-        path: 'device/xiaomi/spinel'
 
     - name: Setup Repo Tool
       run: |
@@ -62,10 +58,11 @@ jobs:
         ./orangefox_sync.sh --branch 12.1 --path ~/fox_12.1
 
     - name: Copy Device Tree & Build Recovery
+      shell: /usr/bin/bash {0}
       run: |
-        # Ensure target folder exists and copy tree
+        # Ensure target folder exists and copy workspace contents
         mkdir -p ~/fox_12.1/device/xiaomi/spinel
-        cp -r $GITHUB_WORKSPACE/device/xiaomi/spinel/* ~/fox_12.1/device/xiaomi/spinel/
+        cp -r $GITHUB_WORKSPACE/* ~/fox_12.1/device/xiaomi/spinel/
         
         cd ~/fox_12.1
         
@@ -77,13 +74,19 @@ jobs:
         export TARGET_SCREEN_WIDTH=1080
         export TARGET_SCREEN_HEIGHT=2400
         
-        # Source build environment
+        # Disable set -e for env setup to handle non-zero exit codes in vendorsetup
+        set +e
         source build/envsetup.sh
-        
-        # Lunch target
         lunch fox_spinel-eng
+        LUNCH_EXIT_CODE=$?
+        set -e
         
-        # Compile recovery with job limiting to conserve memory
+        if [ $LUNCH_EXIT_CODE -ne 0 ]; then
+          echo "Error: lunch target fox_spinel-eng failed with exit status $LUNCH_EXIT_CODE"
+          exit 1
+        fi
+        
+        # Compile recovery image with job limiting
         mka recoveryimage -j2
 
     - name: Upload Recovery Artifacts
