@@ -43,7 +43,7 @@ jobs:
         cd ~/fox_12.1
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        repo init -u https://gitlab.com/OrangeFox/Manifest.git -b fox_12.1 --depth=1
+        repo init -u https://gitlab.com/OrangeFox/sync/manifest.git -b fox_12.1 --depth=1
 
     - name: Sync OrangeFox Source
       run: |
