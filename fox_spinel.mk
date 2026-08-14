@@ -8,10 +8,7 @@
 # -----------------------------------------------------------------
 # 1. INHERIT CONFIGURATIONS
 # -----------------------------------------------------------------
-# Inherit OrangeFox common rules
 $(call inherit-product, vendor/recovery/config/common.mk)
-
-# Inherit device setup
 $(call inherit-product, device/xiaomi/spinel/device.mk)
 
 # -----------------------------------------------------------------
@@ -33,12 +30,6 @@ PRODUCT_PACKAGES += \
     update_verifier \
     update_engine_sideload
 
-PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-    bootctrl.common \
-    libgptutils \
-    libz \
-    libcutils
-
 # -----------------------------------------------------------------
 # 3. PRODUCT BRANDING & DENSITY
 # -----------------------------------------------------------------
@@ -51,6 +42,6 @@ PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Security patch alignment
+# Security Patch alignment
 PLATFORM_SECURITY_PATCH := 2026-06-01
 VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
