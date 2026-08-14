@@ -1,4 +1,4 @@
-#!/bin/bash
+
 #
 # OrangeFox Device Setup for Xiaomi Redmi Note 15 4G (spinel)
 # FULL FEATURE UNLOCK CONFIGURATION
