@@ -41,9 +41,20 @@ jobs:
       run: |
         mkdir -p ~/fox_12.1
         cd ~/fox_12.1
+        
+        # Configure Git identity
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        repo init -u https://gitlab.com/OrangeFox/sync/manifest.git -b fox_12.1 --depth=1
+        
+        # FORCE Git to redirect SSH URLs to HTTPS (Fixes authentication prompt error)
+        git config --global url."https://github.com/".insteadOf "git@github.com:"
+        git config --global url."https://gitlab.com/".insteadOf "git@gitlab.com:"
+        
+        # Prevent terminal prompt hangs
+        export GIT_TERMINAL_PROMPT=0
+        
+        # Initialize repo
+        repo init -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_12.1 --depth=1 --no-repo-verify
 
     - name: Sync OrangeFox Source
       run: |
