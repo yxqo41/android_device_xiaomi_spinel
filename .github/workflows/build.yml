@@ -34,25 +34,22 @@ jobs:
         chmod a+x ~/bin/repo
         echo "$HOME/bin" >> $GITHUB_PATH
 
-    - name: Initialize OrangeFox Manifest
+    - name: Sync Source from GitLab
       run: |
-        mkdir -p ~/fox_12.1
-        cd ~/fox_12.1
-        
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         
-        git config --global url."https://github.com/".insteadOf "git@github.com:"
+        # Force Git to use HTTPS for all GitLab submodules
         git config --global url."https://gitlab.com/".insteadOf "git@gitlab.com:"
         
-        export GIT_TERMINAL_PROMPT=0
+        # Clone official OrangeFox sync tool from GitLab
+        mkdir -p ~/OrangeFox_sync
+        cd ~/OrangeFox_sync
+        git clone https://gitlab.com/OrangeFox/sync.git
         
-        repo init -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_12.1 --depth=1 --no-repo-verify
-
-    - name: Sync OrangeFox Source
-      run: |
-        cd ~/fox_12.1
-        repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune -j$(nproc)
+        # Execute official sync script
+        cd sync
+        ./orangefox_sync.sh --branch 12.1 --path ~/fox_12.1
 
     - name: Checkout Device Tree
       uses: actions/checkout@v4
