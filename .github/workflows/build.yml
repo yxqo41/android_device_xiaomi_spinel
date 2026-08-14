@@ -55,17 +55,28 @@ jobs:
 
     - name: Copy Device Tree & Build Recovery
       run: |
-        # Copy checked out tree to the synced OrangeFox source tree
+        # 1. Copy device tree into sync path
         mkdir -p ~/fox_12.1/device/xiaomi
-        cp -r $GITHUB_WORKSPACE/device/xiaomi/spinel ~/fox_12.1/device/xiaomi/
+        cp -r "$GITHUB_WORKSPACE/device/xiaomi/spinel" ~/fox_12.1/device/xiaomi/
         
+        # 2. Setup build environment
         cd ~/fox_12.1
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_BUILD_TYPE="Unofficial"
         export LC_ALL="C"
         
         source build/envsetup.sh
-        lunch fox_spinel-eng || lunch omni_spinel-eng || lunch twrp_spinel-eng
+        
+        # 3. Lunch target resolution
+        if lunch fox_spinel-eng 2>/dev/null; then
+          echo "Lunched fox_spinel-eng"
+        elif lunch omni_spinel-eng 2>/dev/null; then
+          echo "Lunched omni_spinel-eng"
+        else
+          lunch twrp_spinel-eng
+        fi
+        
+        # 4. Compile
         mka recoveryimage -j$(nproc)
 
     - name: Upload Recovery Artifacts
