@@ -9,16 +9,13 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Clean Up Runner Space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 20480
-        swap-size-mb: 1024
-        remove-dotnet: 'true'
-        remove-android: 'true'
-        remove-haskell: 'true'
-        remove-codeql: 'true'
-        remove-docker-images: 'true'
+    - name: Free Disk Space
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/share/boost
+        sudo apt-get clean
 
     - name: Install Build Dependencies
       run: |
@@ -42,18 +39,14 @@ jobs:
         mkdir -p ~/fox_12.1
         cd ~/fox_12.1
         
-        # Configure Git identity
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         
-        # FORCE Git to redirect SSH URLs to HTTPS (Fixes authentication prompt error)
         git config --global url."https://github.com/".insteadOf "git@github.com:"
         git config --global url."https://gitlab.com/".insteadOf "git@gitlab.com:"
         
-        # Prevent terminal prompt hangs
         export GIT_TERMINAL_PROMPT=0
         
-        # Initialize repo
         repo init -u https://github.com/OrangeFoxRecovery/manifest.git -b fox_12.1 --depth=1 --no-repo-verify
 
     - name: Sync OrangeFox Source
