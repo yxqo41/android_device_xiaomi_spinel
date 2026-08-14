@@ -11,7 +11,6 @@ set -e
 DEVICE=spinel
 VENDOR=xiaomi
 
-# Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
 
@@ -24,9 +23,7 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
-# Default to sanitizing the vendor folder before extraction
 CLEAN_VENDOR=true
-
 KANG=
 SECTION=
 
@@ -53,9 +50,7 @@ if [ -z "${SRC}" ]; then
     SRC="adb"
 fi
 
-# Initialize the helper
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
-
 extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
 
 "${MY_DIR}/setup-makefiles.sh"

@@ -64,7 +64,7 @@ TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_METADATA_PARTITION := true
 
-# Exact Match for HyperOS Security Patch Date (Prevents Keymaster Error -33)
+# Exact Match for HyperOS Security Patch Date
 PLATFORM_SECURITY_PATCH := 2026-06-01
 VENDOR_SECURITY_PATCH := 2026-06-01
 PLATFORM_VERSION := 16

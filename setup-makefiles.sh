@@ -11,7 +11,6 @@ set -e
 DEVICE=spinel
 VENDOR=xiaomi
 
-# Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
 
@@ -24,13 +23,8 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
-# Initialize the helper
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}"
 
-# Warning headers and guards
 write_headers
-
 write_makefiles "${MY_DIR}/proprietary-files.txt" true
-
-# Finish
 write_footers
