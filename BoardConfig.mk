@@ -23,7 +23,6 @@ TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 2400
 TW_THEME := portrait_hdpi
 
-
 # Kernel Configuration
 BOARD_BOOTIMG_HEADER_VERSION := 4
 BOARD_KERNEL_BASE := 0x3fff8000
@@ -58,21 +57,20 @@ BOARD_SUPER_PARTITION_GROUPS := alps_dynamic_partitions
 BOARD_ALPS_DYNAMIC_PARTITIONS_SIZE := 9122611200
 
 # -----------------------------------------------------------------
-# HyperOS 2 / 3 PIN & Pattern Decryption Engine
+# HyperOS PIN & Pattern Decryption Engine
 # -----------------------------------------------------------------
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_METADATA_PARTITION := true
 
-# Exact Match for HyperOS 3 Security Patch Date (Prevents Keymaster Error -33)
+# Exact Match for HyperOS Security Patch Date (Prevents Keymaster Error -33)
 PLATFORM_SECURITY_PATCH := 2026-06-01
 VENDOR_SECURITY_PATCH := 2026-06-01
 PLATFORM_VERSION := 16
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 
 # TWRP Engine & Screen Settings
-TW_THEME := portrait_hdpi
 TW_EXTRA_LANGUAGES := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
