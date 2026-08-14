@@ -65,18 +65,12 @@ jobs:
         export FOX_BUILD_TYPE="Unofficial"
         export LC_ALL="C"
         
+        set +e
         source build/envsetup.sh
+        lunch fox_spinel-eng
+        set -e
         
-        # 3. Lunch target resolution
-        if lunch fox_spinel-eng 2>/dev/null; then
-          echo "Lunched fox_spinel-eng"
-        elif lunch omni_spinel-eng 2>/dev/null; then
-          echo "Lunched omni_spinel-eng"
-        else
-          lunch twrp_spinel-eng
-        fi
-        
-        # 4. Compile
+        # 3. Compile
         mka recoveryimage -j$(nproc)
 
     - name: Upload Recovery Artifacts
