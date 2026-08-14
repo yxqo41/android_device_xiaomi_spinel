@@ -17,6 +17,13 @@ jobs:
         sudo rm -rf /usr/local/share/boost
         sudo apt-get clean
 
+    - name: Set up Swap Space
+      run: |
+        sudo fallocate -l 4G /swapfile
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+
     - name: Install Build Dependencies
       run: |
         sudo apt-get update
@@ -43,7 +50,6 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        
         git config --global url."https://gitlab.com/".insteadOf "git@gitlab.com:"
         
         mkdir -p ~/OrangeFox_sync
@@ -55,23 +61,28 @@ jobs:
 
     - name: Copy Device Tree & Build Recovery
       run: |
-        # 1. Copy device tree into sync path
-        mkdir -p ~/fox_12.1/device/xiaomi
-        cp -r "$GITHUB_WORKSPACE/device/xiaomi/spinel" ~/fox_12.1/device/xiaomi/
+        # Ensure target folder exists and copy tree
+        mkdir -p ~/fox_12.1/device/xiaomi/spinel
+        cp -r $GITHUB_WORKSPACE/device/xiaomi/spinel/* ~/fox_12.1/device/xiaomi/spinel/
         
-        # 2. Setup build environment
         cd ~/fox_12.1
+        
+        # Explicit Environment Exports
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_BUILD_TYPE="Unofficial"
         export LC_ALL="C"
+        export TW_THEME="portrait_hdpi"
+        export TARGET_SCREEN_WIDTH=1080
+        export TARGET_SCREEN_HEIGHT=2400
         
-        set +e
+        # Source build environment
         source build/envsetup.sh
-        lunch fox_spinel-eng
-        set -e
         
-        # 3. Compile
-        mka recoveryimage -j$(nproc)
+        # Lunch target
+        lunch fox_spinel-eng
+        
+        # Compile recovery with job limiting to conserve memory
+        mka recoveryimage -j2
 
     - name: Upload Recovery Artifacts
       uses: actions/upload-artifact@v4
@@ -81,4 +92,3 @@ jobs:
           /home/runner/fox_12.1/out/target/product/spinel/OrangeFox*.img
           /home/runner/fox_12.1/out/target/product/spinel/OrangeFox*.zip
           /home/runner/fox_12.1/out/target/product/spinel/recovery.img
-          
