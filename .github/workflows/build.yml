@@ -60,7 +60,7 @@ jobs:
     - name: Copy Device Tree & Build Recovery
       shell: /usr/bin/bash {0}
       run: |
-        # Ensure target folder exists and copy workspace contents
+        # Ensure target folder exists and copy tree
         mkdir -p ~/fox_12.1/device/xiaomi/spinel
         cp -r $GITHUB_WORKSPACE/* ~/fox_12.1/device/xiaomi/spinel/
         
@@ -74,7 +74,7 @@ jobs:
         export TARGET_SCREEN_WIDTH=1080
         export TARGET_SCREEN_HEIGHT=2400
         
-        # Disable set -e for env setup to handle non-zero exit codes in vendorsetup
+        # Disable set -e temporarily for env setup
         set +e
         source build/envsetup.sh
         lunch fox_spinel-eng
@@ -86,7 +86,7 @@ jobs:
           exit 1
         fi
         
-        # Compile recovery image with job limiting
+        # Compile recovery with job limiting
         mka recoveryimage -j2
 
     - name: Upload Recovery Artifacts
