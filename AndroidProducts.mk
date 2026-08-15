@@ -6,9 +6,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/fox_spinel.mk[span_55](start_span)[span_55](end_span)
+    $(LOCAL_DIR)/fox_spinel.mk
 
 COMMON_LUNCH_CHOICES := \
     fox_spinel-user \
     fox_spinel-userdebug \
-    fox_spinel-eng[span_56](start_span)[span_56](end_span)
+    fox_spinel-eng
