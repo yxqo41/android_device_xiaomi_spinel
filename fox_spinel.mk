@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------
 # 1. INHERIT CONFIGURATIONS
 # -----------------------------------------------------------------
-$(call inherit-product, vendor/recovery/config/common.mk)
+$(call inherit-product, vendor/fox/config/common.mk)
 $(call inherit-product, device/xiaomi/spinel/device.mk)
 
 # -----------------------------------------------------------------
